@@ -36,5 +36,5 @@ extern {
     pub fn columns(this: &Table) -> js_sys::Array;
 
     #[wasm_bindgen]
-    pub fn table(data: &JsValue, options: Option<TableConfig>) -> Table;
+    pub fn table(data: &JsValue, options: Option<&TableConfig>) -> Table;
 }
