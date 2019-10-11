@@ -35,9 +35,6 @@ extern {
     #[wasm_bindgen(method)]
     pub fn columns(this: &Table) -> js_sys::Array;
 
-    #[wasm_bindgen(method, js_name = "columnMetadata")]
-    pub fn column_metadata(this: &Table) -> js_sys::Array;
-
     #[wasm_bindgen]
     pub fn table(data: &JsValue, options: Option<TableConfig>) -> Table;
 }
