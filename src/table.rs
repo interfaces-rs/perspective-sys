@@ -1,5 +1,5 @@
 use crate::view::{View, ViewConfig};
-use js_sys::Object;
+use js_sys::{Function, Object};
 use wasm_bindgen::prelude::*;
 
 pub type TableConfig = Object;
@@ -12,7 +12,7 @@ extern {
     pub fn delete(this: &Table);
 
     #[wasm_bindgen(method)]
-    pub fn on_delete(this: &Table, cb: &Closure<dyn Fn(JsValue)>);
+    pub fn on_delete(this: &Table, cb: &Function);
 
     #[wasm_bindgen(method)]
     pub fn size(this: &Table) -> js_sys::Promise;
@@ -35,7 +35,7 @@ extern {
     #[wasm_bindgen(method)]
     pub fn columns(this: &Table) -> js_sys::Array;
 
-    #[wasm_bindgen(method)]
+    #[wasm_bindgen(method, js_name = "columnMetadata")]
     pub fn column_metadata(this: &Table) -> js_sys::Array;
 
     #[wasm_bindgen]
