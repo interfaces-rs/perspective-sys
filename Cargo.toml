@@ -1,0 +1,48 @@
+[package]
+name = "perspective-sys"
+version = "0.0.1"
+authors = ["Darin Morrison <freebroccolo@users.noreply.github.com>"]
+license = "Apache-2.0 OR MIT"
+readme = "README.md"
+categories = ["wasm"]
+repository = "https://github.com/interfaces-rs/perspective-sys"
+description = """
+Raw bindings to the @jpmorganchase/perspective API for projects using wasm-bindgen.
+"""
+edition = "2018"
+
+[package.metadata.docs.rs]
+all-features = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+env_logger = "^0.7.0"
+failure = "^0.1.5"
+serde = "^1.0.101"
+serde_derive = "^1.0.101"
+sourcefile = "^0.1.4"
+wasm-bindgen-futures = "^0.4.1"
+wasm-bindgen-webidl = "^0.2.51"
+
+[dependencies.js-sys]
+version = "^0.3.28"
+features = []
+
+[dependencies.web-sys]
+version = "^0.3.28"
+features = []
+
+[dependencies.wasm-bindgen]
+version = "^0.2.51"
+features = ["serde-serialize", "strict-macro", "nightly"]
+
+[dev-dependencies]
+wasm-bindgen-test = { version = "=0.3.1" }
+
+[workspace]
+members = [
+]
+
+[patch.crates-io]

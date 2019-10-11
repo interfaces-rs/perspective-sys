@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@jpmorganchase/perspective": "^0.2.23"
+  }
+}
