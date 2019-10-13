@@ -1,5 +1,5 @@
 use crate::view::{View, ViewConfig};
-use js_sys::{Function, Object, Promise};
+use js_sys::{Array, Function, Object, Promise};
 use wasm_bindgen::prelude::*;
 
 pub type TableConfig = Object;
@@ -33,7 +33,7 @@ extern {
     pub fn remove(this: &Table, data: Box<[JsValue]>);
 
     #[wasm_bindgen(method)]
-    pub fn columns(this: &Table) -> js_sys::Array;
+    pub fn columns(this: &Table) -> Array;
 
     #[wasm_bindgen]
     pub fn table(data: &JsValue, options: Option<&TableConfig>) -> Table;
