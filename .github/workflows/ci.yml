@@ -70,6 +70,7 @@ jobs:
           args: wasm-pack
       - run: |
           curl https://get.volta.sh | bash
+          source "${HOME}/.bashrc"
           volta install node@11
           npm ci
       - run: wasm-pack test --node -- --all
