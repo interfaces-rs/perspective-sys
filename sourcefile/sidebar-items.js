@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Position","A position in a source file."],["SourceFile","A concatenated string of files, with sourcemap information."],["Span","A span in a source file"]]});

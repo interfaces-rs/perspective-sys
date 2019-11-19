@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["table",""]],"struct":[["Table",""]],"type":[["TableConfig",""]]});

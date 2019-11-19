@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["compile","Compile the given WebIDL source text into Rust source text containing `wasm-bindgen` bindings to the things described in the WebIDL."]],"struct":[["WebIDLParseError","A parse error indicating where parsing failed"]]});
