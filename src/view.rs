@@ -6,6 +6,6 @@ pub type AggregateConfig = Object;
 pub type ViewConfig = Object;
 
 #[wasm_bindgen(module = perspective)]
-extern "C" {
+extern {
     pub type View;
 }
