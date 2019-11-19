@@ -68,7 +68,10 @@ jobs:
         with:
           command: install
           args: wasm-pack
-      - run: npm ci
+      - run: |
+          curl https://get.volta.sh | bash
+          volta install node@11
+          npm ci
       - run: wasm-pack test --node -- --all
       # FIXME: how does coverage work with wasm-pack?
       # - uses: actions-rs/cargo@v1
