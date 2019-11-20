@@ -59,6 +59,9 @@ jobs:
   linux-cargo-test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '11.x'
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
@@ -68,11 +71,6 @@ jobs:
         with:
           command: install
           args: wasm-pack
-      - run: |
-          curl https://get.volta.sh | bash
-          source "${HOME}/.bashrc"
-          volta install node@11
-          npm ci
       - run: wasm-pack test --node -- --all
       # FIXME: how does coverage work with wasm-pack?
       # - uses: actions-rs/cargo@v1
