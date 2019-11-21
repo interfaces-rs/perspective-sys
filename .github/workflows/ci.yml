@@ -5,6 +5,7 @@ jobs:
   skip-commit:
     runs-on: ubuntu-latest
     steps:
+      - run: echo $HOME
       - if: "contains(github.event.head_commit.message, '[skip-ci]')
           || contains(github.event.head_commit.message, '[skip ci]')
           || contains(github.event.head_commit.message, '[ci-skip]')
@@ -13,10 +14,16 @@ jobs:
 
   # verify that project builds (via "check" via "clippy") on linux
   linux-cargo-clippy:
-    env:
-      RUSTC_WRAPPER: sccache
     needs: [skip-commit]
     runs-on: ubuntu-latest
+    container:
+      image: rust:latest
+      env:
+        RUSTC_WRAPPER: sccache
+      volumes:
+        - ~/.cache
+        - /usr/local/cargo
+        - /home/runner/target
     steps:
       - uses: actions/checkout@v1
       - uses: actions-rs/cargo@v1
@@ -28,26 +35,20 @@ jobs:
           key: ${{ runner.OS }}-sccache-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/cache@v1
         with:
-          path: ~/.cargo/registry
+          path: /usr/local/cargo/registry
           key: ${{ runner.OS }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/cache@v1
         with:
-          path: ~/.cargo/git
+          path: /usr/local/cargo/git
           key: ${{ runner.OS }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/cache@v1
         with:
           path: target
           key: ${{ runner.OS }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          components: clippy
-      - run: curl -L https://github.com/mozilla/sccache/releases/download/0.2.12/sccache-0.2.12-x86_64-unknown-linux-musl.tar.gz | tar zxf - --overwrite --strip-components=1 -C ~/.cargo/bin
-      - uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: --all-targets --all-features -- -D warnings
+      - run: |
+          wget -q -O - https://github.com/mozilla/sccache/releases/download/0.2.12/sccache-0.2.12-x86_64-unknown-linux-musl.tar.gz | tar zxf - --overwrite --strip-components=1 -C /usr/local/cargo/bin
+          rustup component add clippy
+          cargo clippy --all-targets --all-features -- -D warnings
 
   # build the documentation
   linux-cargo-docs:
@@ -55,6 +56,14 @@ jobs:
       RUSTC_WRAPPER: sccache
     needs: [skip-commit]
     runs-on: ubuntu-latest
+    container:
+      image: rust:latest
+      env:
+        RUSTC_WRAPPER: sccache
+      volumes:
+        - ~/.cache
+        - /usr/local/cargo
+        - /home/runner/target
     steps:
       - uses: actions/checkout@v1
       - uses: actions-rs/cargo@v1
@@ -66,32 +75,25 @@ jobs:
           key: ${{ runner.OS }}-sccache-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/cache@v1
         with:
-          path: ~/.cargo/registry
+          path: /usr/local/cargo/registry
           key: ${{ runner.OS }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/cache@v1
         with:
-          path: ~/.cargo/git
+          path: /usr/local/cargo/git
           key: ${{ runner.OS }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/cache@v1
         with:
           path: target
           key: ${{ runner.OS }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
-      - run: curl -L https://github.com/mozilla/sccache/releases/download/0.2.12/sccache-0.2.12-x86_64-unknown-linux-musl.tar.gz | tar zxf - --overwrite --strip-components=1 -C ~/.cargo/bin
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: doc
-          args: --all --all-features
-      - run: cp .ci/assets/docs/index.html target/doc/index.html
       - env:
           PERSONAL_TOKEN: ${{ secrets.ACTIONS_GH_PAGES_TOKEN }}
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: ./target/doc
           SCRIPT_MODE: true
         run: |
+          wget -q -O - https://github.com/mozilla/sccache/releases/download/0.2.12/sccache-0.2.12-x86_64-unknown-linux-musl.tar.gz | tar zxf - --overwrite --strip-components=1 -C /usr/local/cargo/bin
+          cargo doc --all --all-features
+          cp .ci/assets/docs/index.html target/doc/index.html
           wget https://raw.githubusercontent.com/interfaces-rs/actions-gh-pages/v2.5.1/entrypoint.sh
           bash ./entrypoint.sh
 
@@ -120,6 +122,14 @@ jobs:
       RUSTC_WRAPPER: sccache
     needs: [skip-commit]
     runs-on: ubuntu-latest
+    container:
+      image: rust:latest
+      env:
+        RUSTC_WRAPPER: sccache
+      volumes:
+        - ~/.cache
+        - /usr/local/cargo
+        - /home/runner/target
     steps:
       - uses: actions/checkout@v1
       - uses: actions-rs/cargo@v1
@@ -131,18 +141,16 @@ jobs:
           key: ${{ runner.OS }}-sccache-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/cache@v1
         with:
-          path: ~/.cargo/registry
+          path: /usr/local/cargo/registry
           key: ${{ runner.OS }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/cache@v1
         with:
-          path: ~/.cargo/git
+          path: /usr/local/cargo/git
           key: ${{ runner.OS }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/cache@v1
         with:
           path: target
           key: ${{ runner.OS }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
-      - run: curl -L      https://github.com/mozilla/sccache/releases/download/0.2.12/sccache-0.2.12-x86_64-unknown-linux-musl.tar.gz | tar zxf - --overwrite --strip-components=1 -C ~/.cargo/bin
-      - run: curl -L https://github.com/rustwasm/wasm-pack/releases/download/v0.8.1/wasm-pack-v0.8.1-x86_64-unknown-linux-musl.tar.gz | tar zxf - --overwrite --strip-components=1 -C ~/.cargo/bin
       - uses: actions/cache@v1
         with:
           path: node_modules
@@ -151,8 +159,7 @@ jobs:
             ${{ runner.OS }}-build-${{ env.cache-name }}-
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-      - run: wasm-pack test --node -- --all
+      - run: |
+          wget -q -O -      https://github.com/mozilla/sccache/releases/download/0.2.12/sccache-0.2.12-x86_64-unknown-linux-musl.tar.gz | tar zxf - --overwrite --strip-components=1 -C /usr/local/cargo/bin
+          wget -q -O - https://github.com/rustwasm/wasm-pack/releases/download/v0.8.1/wasm-pack-v0.8.1-x86_64-unknown-linux-musl.tar.gz | tar zxf - --overwrite --strip-components=1 -C /usr/local/cargo/bin
+          wasm-pack test --node -- --all
