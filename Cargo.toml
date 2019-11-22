@@ -1,4 +1,5 @@
 [package]
+edition = "2018"
 name = "perspective-sys"
 version = "0.0.1"
 authors = ["Darin Morrison <freebroccolo@users.noreply.github.com>"]
@@ -9,7 +10,6 @@ repository = "https://github.com/interfaces-rs/perspective-sys"
 description = """
 Raw bindings to the @jpmorganchase/perspective API for projects using wasm-bindgen.
 """
-edition = "2018"
 
 [package.metadata.docs.rs]
 all-features = true
