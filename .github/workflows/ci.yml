@@ -153,7 +153,7 @@ jobs:
             ${{ runner.OS }}-
       - uses: actions/setup-node@v1
         with:
-          node-version: '13.x'
+          node-version: '11.x'
       - run: npm ci
       - uses: actions-rs/toolchain@v1
         with:
