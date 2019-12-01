@@ -227,7 +227,7 @@ jobs:
       - name: Configure node
         uses: actions/setup-node@v1
         with:
-          node-version: "13.x"
+          node-version: "11.x"
       - run: npm ci
       - run: cargo fetch
       - run: wasm-pack test --node -- --frozen --all-features --all-targets
