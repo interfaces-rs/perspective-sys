@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["MessageEvent","The `MessageEvent` object"],["Worker","The `Worker` object"]]});
